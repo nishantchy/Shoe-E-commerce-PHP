@@ -1,0 +1,95 @@
+*{
+    padding: 0;;
+    margin: 0;
+    box-sizing: border-box;
+    color: #233565;
+}
+/* Sign up page */
+.main-container{
+    margin-top: 3rem;
+}
+.logo img{
+    width: 250px;
+}
+.logo{
+    display: flex;
+    justify-content: center;
+    margin-left: 3rem;
+}
+
+.form{
+    margin-top: 1rem;
+    display: flex;
+    justify-content: center;
+}
+.column{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.column input{
+    width: 300px;
+    height: 30px;
+    border-radius: 0.3rem;
+    border: 1px solid #dedede;
+}
+/* error */
+
+.file{
+    margin-top: 1rem;
+    border: 1px solid #dedede;
+}
+
+/* #file{
+    padding: 0.3 0.5rem;
+    border-radius: 0.8rem;
+} */
+.submit{
+    margin-top: 1rem;
+}
+#sub{
+    padding: 0.4rem 1rem;
+    border: 0;
+    border-radius: 1rem;
+    background-color: #233565;
+    color: aliceblue;
+    font-weight: bold;
+}
+.footer{
+    display: flex;
+    justify-content: center;
+    color: #233565;
+    font-weight: 500;
+}
+.footer a{
+    color: #233565;
+    text-decoration: underline;
+}
+
+
+
+
+/* login page */
+
+.column1{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.3rem;
+    margin-bottom: 1rem;
+}
+
+.foot1{
+    margin-top: 1rem;
+}
+
+.column1 input{
+    width: 300px;
+    height: 30px;
+    border-radius: 0.3rem;
+    border: 1px solid #dedede;
+}
+.submit input{
+    height: 40px;
+}
