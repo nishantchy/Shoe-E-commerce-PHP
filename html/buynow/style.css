@@ -177,7 +177,6 @@ nav ul li a{
     color: aliceblue;
 }
 .cart{
-    border: 0.5px solid #dedede;
     color: #233565;
     padding: 5px;
 }
@@ -238,4 +237,14 @@ footer{
 }
 #greencheck{
     display: none;
+}
+.order-btns button a{
+    text-decoration: none;
+    color: #233565;
+}
+.quantity{
+    margin: 1rem 0;
+}
+.quantity input{
+    width: 40px;
 }

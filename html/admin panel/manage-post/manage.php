@@ -125,61 +125,86 @@ table{
             </div>
         </div>
         <div class="right-content">
-            <p>Manage Item</p>
-            <div class="table">
-                <table id="example" class="table table-striped" style="width:100%">
-                    <thead>
-                        <tr>
-                            <th>Title</th>
-                            <th>Edit</th>
-                            <th>Delete</th>
-                            <th>Sales</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    <?php
-                     $sql = "SELECT * FROM products";
-                     $result = mysqli_query($conn, $sql);
+    <p>Manage Item</p>
+    <div class="table">
+        <table id="example" class="table table-striped" style="width:100%">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
+                    <th>Sales</th>
+                </tr>
+            </thead>
+            <tbody>
+            <?php
+            $sql = "SELECT * FROM products";
+            $result = mysqli_query($conn, $sql);
 
-                     if (mysqli_num_rows($result) > 0) {
-                         while ($row = mysqli_fetch_assoc($result)) {
-                            $productId = $row['product_id'];
-                             $productName = $row['productName'];
-                             $times_sold = $row['times_sold'];
-                             echo '<tr>';
-                             echo '<td>' . $productName . '</td>';
-                             echo '<td><button><a href=""><img src="../../../svgs/editbtn.png" alt=""></a></button></td>';
-                             echo '<td><button onclick="confirmDelete(' . $productId . ')"><img src="../../../svgs/deletebtn.png" alt=""></button></td>';
-                             echo '<td>'. $times_sold .'</td>';
-                             echo '</tr>';
-                         }
-                     } else {
-                         echo '<tr><td colspan="4">No products found</td></tr>';
-                     }
-                     ?>
-                     <script>
-                     function confirmDelete(productId) {
-                     var confirmation = confirm("Are you sure you want to delete this product?");
-
-                     if (confirmation) {
-                        <?php
-                        $query = "DELETE FROM products WHERE product_id = " . $productId;
-                        $result = mysqli_query($conn, $query);
-
-                        if ($result) {
-                            echo 'alert("Product deleted successfully");';
-                        } else {
-                            echo 'alert("Failed to delete product");';
-                        }
-                        ?>
-                    }
-                    }
-</script>
-                    </tbody>
-                </table>
-            </div>
-            </div>
+            if (mysqli_num_rows($result) > 0) {
+                while ($row = mysqli_fetch_assoc($result)) {
+                    $productId = $row['product_id'];
+                    $productName = $row['productName'];
+                    $times_sold = $row['times_sold'];
+                    echo '<tr>';
+                    echo '<td>' . $productName . '</td>';
+                    echo '<td><button><a href="edit.php?id=' . $productId . '">Edit</a></button></td>';
+                    echo '<td><button onclick="confirmDelete(' . $productId . ', this)">Delete</button></td>';
+                    echo '<td>' . $times_sold . '</td>';
+                    echo '</tr>';
+                }
+            } else {
+                echo '<tr><td colspan="4">No products found</td></tr>';
+            }
+            ?>
+            </tbody>
+        </table>
     </div>
+</div>
+
+<script>
+    function confirmDelete(productId, button) {
+        var confirmation = confirm("Are you sure you want to delete this product?");
+
+        if (confirmation) {
+            // Get the parent row of the delete button and remove it from the table
+            var row = button.parentNode.parentNode;
+            row.parentNode.removeChild(row);
+
+            // Send an AJAX request to delete the product from the database
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "", true);
+            xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    var response = xhr.responseText;
+                    // Handle the response, display success message, etc.
+                    alert(response);
+                }
+            };
+            xhr.send("productId=" + productId);
+        }
+    }
+
+    <?php
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["productId"])) {
+    $productId = $_POST["productId"];
+    
+    // Perform the deletion operation using the $productId
+    $sql = "DELETE FROM products WHERE product_id = " . $productId;
+    $result = mysqli_query($conn, $sql);
+
+    // Provide the appropriate response based on the deletion result
+    if ($result) {
+        echo 'Product deleted successfully';
+    } else {
+        echo 'Failed to delete product';
+    }
+}
+?>
+
+</script>
+
     <script src="/html/admin panel/manage-post/main.js"></script>
     </body>
 </html>

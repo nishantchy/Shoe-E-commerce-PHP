@@ -70,6 +70,7 @@ if (isset($_GET['query'])) {
     flex-wrap: wrap;
 }
 
+
     </style>
 </head>
 <body>

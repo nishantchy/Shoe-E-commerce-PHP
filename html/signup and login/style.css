@@ -93,3 +93,11 @@
 .submit input{
     height: 40px;
 }
+  
+  ::-webkit-input-placeholder {
+    text-align: center;
+  }
+  
+  :-moz-placeholder {
+    text-align: center;
+  }

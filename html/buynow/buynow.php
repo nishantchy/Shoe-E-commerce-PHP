@@ -3,25 +3,18 @@ include "../databaseconnection/dbconnect.php";
 ?>
 
 <?php
-//        session_start();
-// if (isset($_GET['id'])) {
-//     $product_id = $_GET['id'];
-//     $sql = "SELECT product_id,productName, price,details, productImage FROM products WHERE product_id = $product_id";
-//     $result = $conn->query($sql);
-//     if ($result->num_rows > 0) {
-//         $product = $result->fetch_assoc();
-//         $_SESSION['product'] = $products; 
-//     } else {
-//         echo "Product not found.";
-//     }
-// }
 session_start();
 if (isset($_GET['id'])) {
     $product_id = $_GET['id'];
+    $quantity = isset($_POST['quantity']) ? $_POST['quantity'] : 1;
     $sql = "SELECT product_id, productName, price, details, productImage FROM products WHERE product_id = $product_id";
     $result = $conn->query($sql);
     if ($result->num_rows > 0) {
         $product = $result->fetch_assoc();
+        $_SESSION['product'] = $product;
+        $total = $product['price'];
+        $_SESSION['total'] = $total;
+
         if (!isset($_SESSION['cart'])) {
             $_SESSION['cart'] = [];
         }
@@ -30,8 +23,13 @@ if (isset($_GET['id'])) {
         echo "Product not found.";
     }
 }
-
 ?>
+<?php
+if(isset($_POST['add'])){
+
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -175,12 +173,19 @@ nav ul li a{
                 <p class="header"><?php echo $product['productName']; ?></p>
                 <p class="price">Rs. <?php echo $product['price']; ?></p>
                 <p class="price"><?php echo $product['details']; ?></p>
+                <div class="quantity">
+                <form action="" method="post">
+                Quantity: <input type="number" name="quantity" min="1" max="10" value="1" placeholder="1">
+                <!-- <input type="hidden" name="name" value="<?= $product['productName']?>">
+                <input type="hidden" name="price" value="<?= $product['productPrice']?>"> -->
+                </div>
             </div>
-            
             <div class="order-btns">
-                <button class="order"><a href="../payment/payment.php">Order Now</a></button>
                 <?php
-                echo '<button class="buy" onclick="addToCart(\'?id=' . $product['product_id'] . '\');">Add to Cart 
+            echo '<button class="buy-now" type="submit"><a href="../payment/payment.php?id=' . $product["product_id"] . '">Buy Now</a></button>';
+            ?>
+                <?php
+                echo '<button type="submit" class="buy" name="add" onclick="addToCart(\'?id=' . $product['product_id'] . '\');">Add to Cart 
                 <img id="greencheck" src="../../svgs/greencheck.svg" alt=""> </button>';   
                 echo '<script>
                 function addToCart(productId) {
@@ -191,6 +196,7 @@ nav ul li a{
                 </script>';
 ?>
             </div>
+            </form>
         </div>
     </div>
 </section>

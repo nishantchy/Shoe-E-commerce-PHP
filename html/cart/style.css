@@ -199,7 +199,7 @@ nav ul li a{
 }
 .buy-button{
     margin-left: auto;
-    margin-top: -35rem;
+    margin-top: 10rem;
     padding: 2rem 0.5rem;
     box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
 }
@@ -230,3 +230,6 @@ input.checkbox {
     width: 100%;
     margin-left: 22rem;
   }
+
+  /* cart  */
+ 

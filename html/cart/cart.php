@@ -1,24 +1,16 @@
 <?php
 include "../databaseconnection/dbconnect.php";
 ?>
-    <?php
-
+<?php
 session_start();
-if (isset($_GET['id'])) {
-    $product_id = $_GET['id'];
-    $sql = "SELECT product_id, productName, price, details, productImage FROM products WHERE product_id = $product_id";
+if(isset($_GET['id'])) {
+    $sql = "SELECT product_id,productName, price,details, productImage FROM products WHERE product_id = $product_id";
     $result = $conn->query($sql);
     if ($result->num_rows > 0) {
         $product = $result->fetch_assoc();
-        if (!isset($_SESSION['cart'])) {
-            $_SESSION['cart'] = [];
-        }
-        array_push($_SESSION['cart'], $product);
-    } else {
-        echo "Product not found.";
+        $_SESSION['product'] = $products; 
     }
 }
-
 ?>
 
 
@@ -30,12 +22,62 @@ if (isset($_GET['id'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Cart</title>
     <link rel="stylesheet" type="text/css" href="style.css">
-    <link
-    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
-    rel="stylesheet"
-    integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
-    crossorigin="anonymous"
-  />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+  </head>
+  <style>
+      .img img{
+    width: 100px;
+}
+.item-one {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 2rem;
+    width: 100%;
+}
+
+.btns{
+    gap: 1rem;
+}
+.items{
+    display: flex;
+    flex-direction: column;
+}
+.fa-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10rem;
+}
+.fa-details p{
+    width: 70%;
+}
+.name p{
+    font-size: 25px;
+    font-weight: 500;  
+}
+.order-btns {
+    display: flex;
+    gap: 1rem;
+}
+
+.btn-checkout {
+        display: flex;
+        justify-content: flex-end;
+        padding: 40px;
+        margin-left: auto;
+}
+
+/* .btn-success{
+    background-color: #4CAF50;
+    color: #fff;
+    border: 0;
+  }
+  .btn-danger{
+    background-color: red;
+    color: #fff;
+    border: 0;
+  } */
+  </style>
 </head>
 <body>
     <nav id="navigation">
@@ -109,36 +151,46 @@ if (isset($_GET['id'])) {
         </div>
     </nav>
 
-<div class="cart-container">
-<?php
-function displayCartItems() {
-    if (isset($_SESSION['cart']) && count($_SESSION['cart']) > 0) {
+    <div class="fa-container items">
+    <?php
+    // Check if cart is not empty
+    if (!empty($_SESSION['cart'])) {
         foreach ($_SESSION['cart'] as $product) {
-            echo '<div class="cart-item">';
-            echo '<input type="checkbox" class="checkbox">';
-            echo '<img src="../../uploads/' . $product['productImage'] . '" alt="">';
-            echo '<div class="details">';
-            echo '<h4>' . $product['productName'] . '</h4>';
-            echo '<p>Rs. ' . $product['price'] . '</p>';
-            echo '</div>';
-            echo '<div class="quantity">
-            <input class="text-center" type="number" min="1" max="10" value="1" name="quantity">
-            </div>';
-            echo '</div>';
+            ?>
+            <div class="item-one">
+                <div class="img">
+                    <img src="../../uploads/<?php echo $product['productImage']; ?>" alt="">
+                </div>
+                <div class="name">
+                    <p><?php echo $product['productName']; ?></p>
+                    <div class="price">
+                        Rs. <?php echo $product['price']; ?>
+                    </div>
+                </div>
+                <div class="btns d-flex">
+                    <div class="btn-checkout">
+                        <button class="btn btn-success" onclick="checkout(<?php echo $product['product_id']; ?>)">Check out</button>
+                    </div>
+                </div>
+            </div>
+            <?php
         }
     } else {
-        echo "<p class='empty'>Your cart is empty.</p>";
+        echo "<p>Your cart is empty.</p>";
     }
-}
-?>
-<div class="cart-items-container">
-    <?php displayCartItems(); ?>
+    ?>
 </div>
-   <div class="buy-button">
-            <button id="buy-now">Proceed to checkout</button>
-            <button id="cancel">Cancel</button>
-    </div>
-    </div>
+
+<script>
+    function checkout(productId) {
+        window.location.href = "../payment/payment.php?id=" + productId;
+    }
+
+</script>
+
+
+
+
 </body>
 </html>
 

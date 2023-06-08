@@ -74,7 +74,7 @@ if(isset($_POST['submit'])){
                 
                 <div class="column1 email">
                     <label for="">Email Address</label>
-                    <input type="text" name="email" id="b">
+                    <input type="text" name="email" id="b" value="<?php if(isset($_POST['email'])) echo $_POST['email'];?>">
                     <p class="error email-error"><?php echo $email_error ?></p>
                 </div>
                 

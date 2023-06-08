@@ -1,7 +1,22 @@
 <?php
 include "../databaseconnection/dbconnect.php";
 ?>
-
+<?php
+  session_start();
+ if (isset($_GET['id'])) {
+     $product_id = $_GET['id'];
+     $sql = "SELECT product_id,productName, price,details, productImage FROM products WHERE product_id = $product_id";
+     $result = $conn->query($sql);
+     if ($result->num_rows > 0) {
+         $product = $result->fetch_assoc();
+         $_SESSION['product'] = $products; 
+         $total = $product['price'];
+         $_SESSION['total'] = $total;
+     } else {
+         echo "Product not found.";
+   }
+}
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -11,6 +26,14 @@ include "../databaseconnection/dbconnect.php";
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Payment</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        .user .change-img img{
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    object-fit: cover;    
+ }
+    </style>
 </head>
 <body>
 <nav id="navigation">
@@ -37,7 +60,7 @@ include "../databaseconnection/dbconnect.php";
             <div class="user">
                 <div class="change-img">
                 <?php
-                session_start();
+                
                 // echo $_SESSION['loggedin'];
                  if(isset($_SESSION['loggedin']) && $_SESSION['loggedin']=true){
                     $email = $_SESSION['email'];
@@ -107,7 +130,7 @@ include "../databaseconnection/dbconnect.php";
         </div>
         <div class="summary">
             <p class="head">Order Summary</p>
-            <p class="amount">Total Amount: </p>
+            <p class="amount">Total Amount: Rs.  <?php echo $total ?></p>
         </div>
     </div>
    <!-- Footer -->

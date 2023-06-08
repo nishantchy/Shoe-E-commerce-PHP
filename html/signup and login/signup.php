@@ -162,31 +162,31 @@ if(isset($_POST['submit'])){
             <form action="" method="post" enctype="multipart/form-data">
                 <div class="column first-name">
                     <label for="">First Name</label>
-                    <input type="text" name="first" id="fname">
+                    <input type="text" name="first" id="fname" value="<?php if(isset($_POST['first'])) echo $_POST['first'];?>">
                     <p class="error fname-error"><?php echo $ferror ?></p>  
                     <p class="error1 fname-error1"><?php echo $ferror1 ?></p>  
                 </div>
                 <div class="column last-name">
                     <label for="">Last Name</label>
-                    <input type="text" name="last" id="lname">
+                    <input type="text" name="last" id="lname" value="<?php if(isset($_POST['last'])) echo $_POST['last'];?>">
                     <p class="error lname-error"><?php echo $lerror ?></p>  
                     <p class="error1 lname-error1"><?php echo $lerror1 ?></p> 
                 </div>
                 <div class="column email">
                     <label for="">Email Address</label>
-                    <input type="text" name="email" id="email" width="10px">
+                    <input type="text" name="email" id="email" width="10px" value="<?php if(isset($_POST['email'])) echo $_POST['email'];?>">
                     <p class="error email-error"><?php echo $eError ?></p>  
                     <p class="error1 email-error1"><?php echo $eError1 ?></p> 
                 </div>
                 <div class="column phone">
                     <label for="">Phone Number</label>
-                    <input type="text" name="phone" id="phone" width="10px">
+                    <input type="text" name="phone" id="phone" width="10px" value="<?php if(isset($_POST['phone'])) echo $_POST['phone'];?>">
                     <p class="error phone-error"><?php echo $perror ?></p>  
                     <p class="error1 phone-error1"><?php echo $perror1 ?></p> 
                 </div>
                 <div class="column password">
                     <label for="">Password</label>
-                    <input type="password" name="pass" id="pass">
+                    <input type="password" name="pass" id="pass" value="<?php if(isset($_POST['pass'])) echo $_POST['pass'];?>"> 
                     <p class="error pass-error"><?php echo $PassError ?></p>  
                     <p class="error1 pass-error1"><?php echo $PassError1 ?></p> 
                 </div>

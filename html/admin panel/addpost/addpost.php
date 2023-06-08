@@ -11,7 +11,7 @@ $conn = mysqli_connect($server, $username, $password, $dbname);
 ?>
 
 
-<?php
+<?php 
 $success = $error = $uploadError = $fileError1 = $fileError = $error1 = $priceError = $priceError1= $titleError=null;
 if(isset($_POST['submit'])){
     $title = $_POST['title'];

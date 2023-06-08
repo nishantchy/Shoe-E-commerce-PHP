@@ -8,56 +8,51 @@ $dbname = "fourthsem";
 $conn = mysqli_connect($server, $username, $password, $dbname);
 ?>
 <?php
-$success = $error = $uploadError = $fileError1 = $fileError = $error1 = $priceError = $priceError1= $titleError=null;
-if(isset($_POST['submit'])){
-    $title = $_POST['title'];
-    $price = $_POST['price'];
-    $details = $_POST['details'];
-    $target_dir = "../../../uploads/";
-    $target_file = $target_dir . basename($_FILES["fileUpload"]["name"]);
-    $img = basename($_FILES["fileUpload"]["name"]);
-    $uploadOk = 1;
-    $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
-    if(empty($title)){
-        $titleError = "Please fill title";
-    }
-    else if(empty($price)){
-        $priceError1 = "Fill price section";
-    }
-    else if($price < 0){
-        $priceError = "Price cannot be negative";
-    }
-    
-    else if($_FILES["fileUpload"]["size"]>500000000){
-        $fileError1 = "Sorry, your file is too large"; 
-        $uploadOk =0;
-    }
-    else if($imageFileType != "jpg" && $imageFileType !="png" && $imageFileType!="jpeg"){
-        $fileError = "Sorry, only jpg, jpeg and png files are allowed.";
-        $uploadOk = 0;
-    }
-    else if($uploadOk==0){
-        $uploadError = "Sorry, your file was not uploaded";
-    }
-    
-    else{
-        if(move_uploaded_file($_FILES["fileUpload"]["tmp_name"], $target_file)){
-            if (mysqli_num_rows($result) > 0) {
-                while ($row = mysqli_fetch_assoc($result)) {
-                   $productId = $row['product_id'];
-            $sql = "UPDATE `products` SET `productName` = '$title', `price` = '$price', `details` = '$details', `productImage` = '$img' WHERE `product_id` = $productId";
-           $result = mysqli_query($conn, $sql);
-            if($result){
-            $success = "Product Edited Successfully";
+$success = $error = $uploadError = $fileError1 = $fileError = $error1 = $priceError = $priceError1 = $titleError = null;
+
+// Check if the product ID is provided in the URL
+if (isset($_GET['id'])) {
+    $productId = $_GET['id'];
+
+    if (isset($_POST['submit'])) {
+        $title = $_POST['title'];
+        $price = $_POST['price'];
+        $details = $_POST['details'];
+        $target_dir = "../../../uploads/";
+        $target_file = $target_dir . basename($_FILES["fileUpload"]["name"]);
+        $img = basename($_FILES["fileUpload"]["name"]);
+        $uploadOk = 1;
+        $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
+
+        if (empty($title)) {
+            $titleError = "Please fill the title";
+        } else if (empty($price)) {
+            $priceError1 = "Please fill the price section";
+        } else if ($price < 0) {
+            $priceError = "Price cannot be negative";
+        } else if ($_FILES["fileUpload"]["size"] > 500000000) {
+            $fileError1 = "Sorry, your file is too large";
+            $uploadOk = 0;
+        } else if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg") {
+            $fileError = "Sorry, only jpg, jpeg, and png files are allowed.";
+            $uploadOk = 0;
+        } else if ($uploadOk == 0) {
+            $uploadError = "Sorry, your file was not uploaded";
+        } else {
+            if (move_uploaded_file($_FILES["fileUpload"]["tmp_name"], $target_file)) {
+                $sql = "UPDATE `products` SET `productName` = '$title', `price` = '$price', `details` = '$details', `productImage` = '$img' WHERE `product_id` = $productId";
+                $result = mysqli_query($conn, $sql);
+
+                if ($result) {
+                    $success = "Product Edited Successfully";
+                } else {
+                    $error = "Error Editing product";
+                }
+            } else {
+                $error1 = "Sorry, there was an error uploading the file";
             }
-            else{
-            $error = "Error Editing product";
-            }
-        }}
-        else{
-            $error1 = "Sorry, there was an error uploading the file";
         }
-    } 
+    }
 }
 ?>
 <!DOCTYPE html>
@@ -102,47 +97,41 @@ if(isset($_POST['submit'])){
 }
 .error{
     display: none;
+    color: red !important;
+    font-size: 16px !important;
 }
-.error1{
-    display: none;
-}
+
 .success{
     display: none;
+    margin-top: 3rem;
 }
     </style>
-
-    <style>
-         <?php
+    <?php
+    if($error1 != null){
+        ?> <style>.error1{display: block; color:red;}</style><?php
+    }
+    if($uploadError != null){
+        ?> <style>.upload-error{display: block; color:red;}</style><?php
+    }
+    if($fileError != null){
+        ?> <style>.file-error{display: block; color:red;}</style><?php
+    }
+    if($fileError1 != null){
+        ?> <style>.file-error1{display: block; color:red;}</style><?php
+    }
+    if($priceError != null){
+        ?> <style>.price-error{display: block; color:red;}</style><?php
+    }
+    if($priceError1 != null){
+        ?> <style>.price-error1{display: block; color:red;}</style><?php
+    }
+    if($titleError != null){
+        ?> <style>.title-error{display: block; color:red;}</style><?php
+    }
     if($success!=NULL){
         ?> <style>.success{display: block;color:white;background-color:green;width:15%;text-align:center;margin:auto;border-radius:0.2rem;padding:0.7rem}</style> <?php
     }
-    if($error!= NULL){
-        ?><?php echo "<script>alert('$error')</script>" ?> <?php
-    }
-    if($error1!= NULL){
-        ?><style>.error1{display: block;color:red;}</style><?php
-    }
-    if($titleError!= NULL){
-        ?><style>.error{display: block;color:red;}</style><?php
-    }
-    if($fileError!= NULL){
-        ?><style>.error{display: block;color:red;}</style></style> <?php
-    }
-    if($fileError1!= NULL){
-        ?><style>.error1{display: block;color:red;}</style><?php
-    }
-    if($uploadError!= NULL){
-        ?><style>.error1{display: block;color:red;}</style><?php
-    }
-    if($priceError1!= NULL){
-        ?> <style>.error1{display: block;color:red;}</style> <?php
-    }
-    if($priceError!= NULL){
-        ?><style>.error{display: block;color:red;}</style> <?php
-    }
-    
-    ?>
-    </style>
+?>
 </head>
 <body>
 <nav>
@@ -200,6 +189,9 @@ if(isset($_POST['submit'])){
     </nav>
 
     <!-- END of Navigation -->
+    <div class="success">
+        <?php echo $success?>
+    </div>
     <div class="title">
         <p>Edit Page</p>
     </div>
@@ -208,13 +200,13 @@ if(isset($_POST['submit'])){
             <div class="title">
             <label for="">Title</label>
             <input type="text" name="title" id="">
-            <p class="error"><?php echo $titleError ?></p>
+            <p class="error title-error"><?php echo $titleError ?></p>
             </div>
             <div class="price">
             <label for="">Price</label>
             <input type="text" name="price" id="">
-            <p class="error"><?php echo $priceError ?></p>
-            <p class="error1"><?php echo $priceError1 ?></p>
+            <p class="error price-error"><?php echo $priceError ?></p>
+            <p class="error price-error1"><?php echo $priceError1 ?></p>
             </div>
             <div class="details">
             <label for="">Details</label>
@@ -222,10 +214,10 @@ if(isset($_POST['submit'])){
             </div>
             <div class="file">
             <input type="file" name="fileUpload" id="">
-            <p class="error"><?php echo $fileError ?></p>  
-            <p class="error1"><?php echo $fileError1 ?></p>
-            <p class="error1"><?php echo $uploadError ?></p>
-            <p class="error1"><?php echo $error1 ?></p>
+            <p class="error file-error"><?php echo $fileError ?></p>  
+            <p class="error file-error1"><?php echo $fileError1 ?></p>
+            <p class="error upload-error"><?php echo $uploadError ?></p>
+            <p class="error error1"><?php echo $error1 ?></p>
             </div>
             <div class="save-post">
              <input type="submit" name="submit" value="Edit Item" id="">
