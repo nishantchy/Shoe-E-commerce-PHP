@@ -1,20 +1,17 @@
 <?php
 include "../databaseconnection/dbconnect.php";
-?>
-<?php
-  session_start();
- if (isset($_GET['id'])) {
-     $product_id = $_GET['id'];
-     $sql = "SELECT product_id,productName, price,details, productImage FROM products WHERE product_id = $product_id";
-     $result = $conn->query($sql);
-     if ($result->num_rows > 0) {
-         $product = $result->fetch_assoc(); 
-         $total = $product['price'];
-     } else {
-         echo "Product not found.";
-   }
+require('config.php');
+session_start();
+if (isset($_GET['id'])) {
+    $product_id = $_GET['id'];
+    $sql = "SELECT product_id, productName, price, details, productImage FROM products WHERE product_id = $product_id";
+    $result = $conn->query($sql);
+    if ($result->num_rows > 0) {
+        $product = $result->fetch_assoc();
+    }
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -22,17 +19,10 @@ include "../databaseconnection/dbconnect.php";
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Payment</title>
+    <title>Stripe</title>
     <link rel="stylesheet" href="style.css">
-    <style>
-        .user .change-img img{
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    object-fit: cover;    
- }
-    </style>
 </head>
+
 <body>
 <nav id="navigation">
         <div class="logo"><a href="../Main Page/index.php"><img src="../../svgs/logo-no-background.svg" alt=""></a></div>
@@ -58,7 +48,6 @@ include "../databaseconnection/dbconnect.php";
             <div class="user">
                 <div class="change-img">
                 <?php
-                
                 // echo $_SESSION['loggedin'];
                  if(isset($_SESSION['loggedin']) && $_SESSION['loggedin']=true){
                     $email = $_SESSION['email'];
@@ -110,33 +99,46 @@ include "../databaseconnection/dbconnect.php";
     <!-- End of Navigation -->
 
 <!-- Main Content -->
-    <p class="intro">Select Payment Method</p>
+    <p class="intro">Stripe</p>
     <div class="container">
         <div class="payments">
             <div class="esewa">
-            <?php
-            echo '<a href="../payment/stripe.php?id=' . $product["product_id"] . '"><img src="../../svgs/stripe.svg" alt=""></a>';
-            ?>
+                <a href=""><img src="../../svgs/stripe.svg" alt=""></a>
                 <p>Stripe</p>
             </div>
-            <div class="esewa">
-                <a href="esewa.php"><img src="../../svgs/esewa-seeklogo.com.svg" alt=""></a>
-                <p>Esewa Wallet</p>
-            </div>
-            <div class="khalti">
-                <a href="khalti.php"><img src="../../svgs/khalti-seeklogo.com.svg" alt=""></a>
-                <p>Khalti Wallet</p>
-            </div>
-            <div class="cash">
-                <a href=""><img src="../../svgs/cash-on-delivery.png" alt=""></a>
-                <p>Cash on delivery</p>
-            </div>
-        </div>
-        <div class="summary">
-            <p class="head">Order Summary</p>
-            <p class="amount">Total Amount: Rs.  <?php echo $total ?></p>
-        </div>
     </div>
+   </div>
+   <div class="form-section">
+    <form action="success.php" method="post">
+    <div class="esewa-id">
+        <input type="text" name="name" id="" placeholder="Name">
+    </div>
+    <div class="esewa-id">
+        <input type="text" name="address" id="" placeholder="Address">
+    </div>
+    <div class="esewa-id">
+        <input type="text" name="number" id="" placeholder="Contact Number">
+    </div>
+    <div class="esewa-name">
+        <input type="text" name="p_name" id="" placeholder="Product Name" value="<?php echo $product['productName'] ?>">
+    </div>
+    <div class="esewa-name">
+        <input type="text" name="p_price" id="" placeholder="Product Price" value="<?php echo $product['price'] ?>">
+    </div>
+    <!-- <div class="pay">
+        <input type="submit" name="submit" id="" value="Pay Now">
+    </div> -->
+    <!-- <input type="hidden" name="stripeToken" id="stripeToken" value=""> -->
+    <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+    data-key="<?php echo $publishableKey ?>"
+    data-amount=<?php echo $product['price'] * 100 ?>
+    data-name="<?php echo $product['productName'] ?>"
+    data-description="<?php echo $product['productName'] ?>"
+    data-image="<?php echo $product['productImage'] ?>"
+    data-currency="usd">
+    </script>
+    </form>
+   </div>
    <!-- Footer -->
    <footer>
         <div class="follow">
