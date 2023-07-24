@@ -7,12 +7,25 @@ include "../databaseconnection/dbconnect.php";
      $product_id = $_GET['id'];
      $sql = "SELECT product_id,productName, price,details, productImage FROM products WHERE product_id = $product_id";
      $result = $conn->query($sql);
-     if ($result->num_rows > 0) {
-         $product = $result->fetch_assoc(); 
-     } else {
-         echo "Product not found.";
-   }
+     if ($result) {
+        $product = $result->fetch_assoc();
+        $orderProductName = $product['productName'];
+        $orderPrice = $product['price'];
+        $orderImage = $product['productImage'];
+
+        $insertSql = "INSERT INTO orders (o_name, o_price, o_image) VALUES ('$orderProductName', $orderPrice, '$orderImage')";
+        $insertResult = $conn->query($insertSql);
+
+        if ($insertResult) {
+            // echo "Order details inserted successfully.";
+        } else {
+            echo "Error inserting order details: " . $conn->error;
+        }
+    } else {
+        echo "Error fetching product details: " . $conn->error;
+    }
 }
+
 ?>
 
 <!DOCTYPE html>

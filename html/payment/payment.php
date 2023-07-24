@@ -129,7 +129,7 @@ $total = $_POST['price'] * $_POST['quantity'];
             </div>
             <div class="cash">
                 <img src="../../svgs/cash-on-delivery.png" alt="">
-                <?php echo '<form action="../payment/cashond.php?id' .$product['product_id'] . '" method="post">'; ?>
+                <?php echo '<form action="../payment/cashond.php?id=' .$product['product_id'] . '" method="post">'; ?>
                 <input type="hidden" name="total" value="<?php echo $total; ?>">
                 <p>Cash on delivery</p>
                 <?php echo '<input type="submit" name="submit" value="Cash On Delivery" id="buynow">';?>

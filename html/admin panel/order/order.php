@@ -116,33 +116,31 @@ $conn = mysqli_connect($server, $username, $password, $dbname);
             <table id="example" class="table table-striped" style="width:100%;">
                         <thead>
                             <tr>
+                                <th>Order Id</th>
                                 <th>Name</th>
-                                <th>Product Details</th>
                                 <th>Amount</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>Nishant</td>
-                                <td>Nike Air Force</td>
-                                <td>4000</td>
-                            </tr>
-                            <tr>
-                                <td>Nike Shoes</td>
-                                <td>Nike Air Force</td>
-                                <td>3000</td>
-                            </tr>
-                            <tr>
-                                <td>Nike Shoes</td>
-                                <td>Nike Air Force</td>
-                                <td>2000</td>
-                            </tr>
-                            <tr>
-                                <td>Nike Shoes</td>
-                                <td>Nike Air Force</td>
-                                <td>3000</td>
-                            </tr>
-                           
+                        <?php
+            $sql = "SELECT * FROM orders";
+            $result = mysqli_query($conn, $sql);
+
+            if (mysqli_num_rows($result) > 0) {
+                while ($row = mysqli_fetch_assoc($result)) {
+                    $order_id = $row['order_id'];
+                    $order_name = $row['o_name'];
+                    $order_price = $row['o_price'];
+                    echo '<tr>';
+                    echo '<td>' . $order_id . '</td>';
+                    echo '<td>' . $order_name . '</td>';
+                    echo '<td>' . $order_price . '</td>';
+                    echo '</tr>';
+                }
+            } else {
+                echo '<tr><td colspan="4">No products found</td></tr>';
+            }
+            ?>             
                             </tbody>
                             </table>
         </div>

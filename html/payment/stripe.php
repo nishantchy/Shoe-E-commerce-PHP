@@ -108,7 +108,7 @@ if (isset($_GET['id'])) {
             </div>
         </div>
    <div class="form-section">
-    <form action="success.php" method="post">
+   <?php echo '<form action="success.php?id=' . $product['product_id'] . '" method="post">'; ?>
              <?php
               $total = $_POST['total'];
               echo '<input type="hidden" name="total" value="' . $total . '">';
@@ -117,7 +117,7 @@ if (isset($_GET['id'])) {
     data-key="<?php echo $publishableKey ?>"
     data-amount=<?php echo $total * 100?>
     data-name="<?php echo $product['productName'] ?>"
-    data-description="<?php echo $product['productName'] ?>"
+    data-description="<?php echo $product['details'] ?>"
     data-image= "<?php echo $product['productImage'] ?>"
     data-currency="inr">
     </script>
