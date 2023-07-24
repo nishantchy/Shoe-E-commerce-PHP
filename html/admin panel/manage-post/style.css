@@ -147,6 +147,9 @@ nav ul li a{
 .table button img{
     width: 20px;
 }
+.table a{
+    text-decoration: none;
+}
 table{
     text-align: center;
     font-size: 15px;

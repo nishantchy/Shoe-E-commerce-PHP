@@ -1,17 +1,19 @@
 <?php
 include "../databaseconnection/dbconnect.php";
-require('config.php');
-session_start();
-if (isset($_GET['id'])) {
-    $product_id = $_GET['id'];
-    $sql = "SELECT product_id, productName, price, details, productImage FROM products WHERE product_id = $product_id";
-    $result = $conn->query($sql);
-    if ($result->num_rows > 0) {
-        $product = $result->fetch_assoc();
-    }
+?>
+<?php
+  session_start();
+ if (isset($_GET['id'])) {
+     $product_id = $_GET['id'];
+     $sql = "SELECT product_id,productName, price,details, productImage FROM products WHERE product_id = $product_id";
+     $result = $conn->query($sql);
+     if ($result->num_rows > 0) {
+         $product = $result->fetch_assoc(); 
+     } else {
+         echo "Product not found.";
+   }
 }
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -19,10 +21,28 @@ if (isset($_GET['id'])) {
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stripe</title>
+    <title>Payment</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        .user .change-img img{
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    object-fit: cover;    
+ }
+ /* footer{
+    margin-top: 9.4rem;
+ } */
+ .order-info{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20rem;
+    margin-bottom: 6rem;
+ }
+ 
+    </style>
 </head>
-
 <body>
 <nav id="navigation">
         <div class="logo"><a href="../Main Page/index.php"><img src="../../svgs/logo-no-background.svg" alt=""></a></div>
@@ -48,6 +68,7 @@ if (isset($_GET['id'])) {
             <div class="user">
                 <div class="change-img">
                 <?php
+                
                 // echo $_SESSION['loggedin'];
                  if(isset($_SESSION['loggedin']) && $_SESSION['loggedin']=true){
                     $email = $_SESSION['email'];
@@ -99,33 +120,26 @@ if (isset($_GET['id'])) {
     <!-- End of Navigation -->
 
 <!-- Main Content -->
-    <p class="intro">Stripe</p>
-    <div class="container">
-        <div class="payments">
-            <div class="esewa">
-                <img src="../../svgs/stripe.svg" alt="">
-                <p>Stripe</p>
-            </div>
-        </div>
-   <div class="form-section">
-    <form action="success.php" method="post">
-             <?php
-              $total = $_POST['total'];
-              echo '<input type="hidden" name="total" value="' . $total . '">';
-             ?>
-    <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-    data-key="<?php echo $publishableKey ?>"
-    data-amount=<?php echo $total * 100?>
-    data-name="<?php echo $product['productName'] ?>"
-    data-description="<?php echo $product['productName'] ?>"
-    data-image= "<?php echo $product['productImage'] ?>"
-    data-currency="inr">
-    </script>
-    </form>
-   </div>
-   </div>
-   <!-- Footer -->
-   <footer>
+
+<?php  
+$total = $_POST['total'];
+?>
+
+<?php
+date_default_timezone_set('UTC');
+$currentDate = date('Y-m-d');
+$futureDate = date('Y-m-d', strtotime($currentDate . ' +2 days'));
+
+?>
+
+           <div class="order-info">
+              <p>Your total is Rs. <?php echo $total ?> and you will receive your order in <?= $futureDate?>.</p>
+           </div>
+
+
+
+<!-- Footer -->
+<!-- <footer>
         <div class="follow">
             <p>Follow Us</p>
         </div>
@@ -139,6 +153,6 @@ if (isset($_GET['id'])) {
             <p>9868211546, 9843211483</p>
             <p>&copy;Nishant and Ganesh</p>
         </div>
-    </footer>
+    </footer> -->
 </body>
 </html>

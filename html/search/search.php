@@ -1,17 +1,7 @@
 <?php
 include "../databaseconnection/dbconnect.php";
-require('config.php');
-session_start();
-if (isset($_GET['id'])) {
-    $product_id = $_GET['id'];
-    $sql = "SELECT product_id, productName, price, details, productImage FROM products WHERE product_id = $product_id";
-    $result = $conn->query($sql);
-    if ($result->num_rows > 0) {
-        $product = $result->fetch_assoc();
-    }
-}
-?>
 
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -19,20 +9,64 @@ if (isset($_GET['id'])) {
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stripe</title>
-    <link rel="stylesheet" href="style.css">
-</head>
+    <title>Hamro Jutta</title>
+    <link rel="stylesheet" type="text/css" href="../Main Page/style.css">
+    <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+    integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
+    crossorigin="anonymous"
+  />
+    <style>
+  
+.user ul{
+    position: absolute;
+    top: 120%;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 3rem 3rem rgba(0,0,0,0.4);
+    visibility: hidden;
+    opacity: 0;
+    transition: all 300ms ease;
+    background-color: #868383;
+    padding: 0.3rem 1rem;
+    border-radius: 0.7rem;
+}
 
+
+.user:hover > ul{
+    visibility: visible;
+    opacity: 1;
+}
+.change-img{
+    background-color: #233565;
+    border-radius: 50%;
+    padding: 0.1rem;
+    margin-left: 3px;
+}
+#products{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 3rem;
+}
+.product-container {
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+    </style>
+</head>
 <body>
-<nav id="navigation">
+    <nav id="navigation">
         <div class="logo"><a href="../Main Page/index.php"><img src="../../svgs/logo-no-background.svg" alt=""></a></div>
         <div class="menu">
             <div class="search-bar">
-                <li><input type="text" placeholder="Search" name="" id=""></li>
-                <li><form action="" method="get">
+                <li><form action="../search/search.php" method="get">
+                <li><input type="text" placeholder="Search" name="search" id=""></li>
                 <button type="submit"><img src="../../svgs/icons8-search.svg" alt=""></button>
                 </form></li>
-                </ul>
             </div>
             <div class="list">
                 <ul class="list-menu">
@@ -48,6 +82,7 @@ if (isset($_GET['id'])) {
             <div class="user">
                 <div class="change-img">
                 <?php
+                session_start();
                 // echo $_SESSION['loggedin'];
                  if(isset($_SESSION['loggedin']) && $_SESSION['loggedin']=true){
                     $email = $_SESSION['email'];
@@ -97,48 +132,43 @@ if (isset($_GET['id'])) {
         </div>
     </nav>
     <!-- End of Navigation -->
+    <div class="search-container">
+    <?php
+    
+    if (isset($_GET['search'])) {
+        $searchTerm = $_GET['search'];
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+        $sql = "SELECT * FROM products WHERE productName LIKE '%$searchTerm%'";
+    
+        $result = $conn->query($sql);
+    
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                $product = $row;
+                echo "<div class='product'>";?>
+                 <div class="search-img"><img src="<?php echo '../../uploads/'.$row['productImage']; ?>" /></div>
+                 <div class="search-content">
+                 <?php
+                echo "<h3>" . $row['productName'] . "</h3>";
+                echo "<p>" . $row['details'] . "</p>";
+                echo '<p class="price">Rs. ' . $product["price"] . '</p>';
+                echo '<button class="buy-specific"><a href="../buynow/buynow.php?id=' . $product["product_id"] . '">View details</a></button>';
+                echo "</div>";
+                echo "</div>";
+            }
+        } else {
+            echo "No results found.";
+        }
+        $conn->close();
+    } else {
+        echo "Please enter a search term.";
+    }
+    
+    
+    ?>
+    </div>
 
-<!-- Main Content -->
-    <p class="intro">Stripe</p>
-    <div class="container">
-        <div class="payments">
-            <div class="esewa">
-                <img src="../../svgs/stripe.svg" alt="">
-                <p>Stripe</p>
-            </div>
-        </div>
-   <div class="form-section">
-    <form action="success.php" method="post">
-             <?php
-              $total = $_POST['total'];
-              echo '<input type="hidden" name="total" value="' . $total . '">';
-             ?>
-    <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-    data-key="<?php echo $publishableKey ?>"
-    data-amount=<?php echo $total * 100?>
-    data-name="<?php echo $product['productName'] ?>"
-    data-description="<?php echo $product['productName'] ?>"
-    data-image= "<?php echo $product['productImage'] ?>"
-    data-currency="inr">
-    </script>
-    </form>
-   </div>
-   </div>
-   <!-- Footer -->
-   <footer>
-        <div class="follow">
-            <p>Follow Us</p>
-        </div>
-        <div class="icons">
-            <div class="fb"><img src="../../svgs/icons8-facebook-circled.svg" alt=""></div>
-            <div class="fb"><img src="../../svgs/icons8-instagram.svg" alt=""></div>
-        </div>
-        <div class="foot-contact">
-            <p>hamrojutta.nepal.com</p>
-            <p>01-4323232</p>
-            <p>9868211546, 9843211483</p>
-            <p>&copy;Nishant and Ganesh</p>
-        </div>
-    </footer>
 </body>
 </html>

@@ -4,6 +4,7 @@ include "../databaseconnection/dbconnect.php";
 <?php
 session_start();
 if(isset($_GET['id'])) {
+    $product_id = $_GET['id'];
     $sql = "SELECT product_id,productName, price,details, productImage FROM products WHERE product_id = $product_id";
     $result = $conn->query($sql);
     if ($result->num_rows > 0) {
@@ -66,6 +67,7 @@ if(isset($_GET['id'])) {
         padding: 40px;
         margin-left: auto;
 }
+
 
 /* .btn-success{
     background-color: #4CAF50;
@@ -151,34 +153,60 @@ if(isset($_GET['id'])) {
         </div>
     </nav>
 
-    <div class="fa-container items">
+    <div class="fa-container">
     <?php
-    // Check if cart is not empty
-    if (!empty($_SESSION['cart'])) {
-        foreach ($_SESSION['cart'] as $product) {
-            ?>
-            <div class="item-one">
-                <div class="img">
-                    <img src="../../uploads/<?php echo $product['productImage']; ?>" alt="">
-                </div>
-                <div class="name">
-                    <p><?php echo $product['productName']; ?></p>
-                    <div class="price">
-                        Rs. <?php echo $product['price']; ?>
-                    </div>
-                </div>
-                <div class="btns d-flex">
-                    <div class="btn-checkout">
-                        <button class="btn btn-success" onclick="checkout(<?php echo $product['product_id']; ?>)">Check out</button>
-                    </div>
-                </div>
-            </div>
-            <?php
+
+        echo '<h1>Your Cart</h1>';
+        ?><?php
+        if (isset($_SESSION['cart']) && count($_SESSION['cart']) > 0) {
+            foreach ($_SESSION['cart'] as $product) {
+        echo '<div class="cart-contents">';
+        ?>
+         <div class="cart-img"><img src="../../uploads/<?php echo $product['productImage']; ?>" alt=""></div>
+        <div class="p-name"> <?php echo $product['productName'] ?></div>
+        <div class="action">
+        <?php
+            echo '<form action="../payment/payment.php?id=' . $product['product_id'] . '" method="post">'; 
+        ?>
+        
+        <div class="product-price">
+        <b>Rs.</b> <input type="text" name="price" size="3" value="<?php echo $product['price'];  ?>">
+        </div>
+        <div class="product-quantity">
+            <b>Quantity:</b> <input type="number" name="quantity" min="1" max="10" value="1">
+        </div>
+        
+        <div class="proceed">
+        <input type="submit" name="submit" value="Proceed to checkout">
+        </div>
+        
+        </form>
+        <div class="remove"><?php echo '<a href="cart.php?remove=' .$product['product_id'] .'">Remove from cart</a>'?></div>
+        </div>
+        <?php
+    }?>
+</div>
+</div>
+<?php
+    // echo '<a href="../payment/payment.php">Proceed to Checkout</a>';
+} else {
+    echo '<p>Your cart is empty.</p>';
+}
+
+// Check if remove from cart link has been clicked
+if (isset($_GET['remove'])) {
+    $productId = $_GET['remove'];
+
+    // Remove the product from the cart
+    foreach ($_SESSION['cart'] as $key => $product) {
+        if ($product['product_id'] == $productId) {
+            unset($_SESSION['cart'][$key]);
+            break;
         }
-    } else {
-        echo "<p>Your cart is empty.</p>";
     }
-    ?>
+}
+?>
+
 </div>
 
 <script>

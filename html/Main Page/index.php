@@ -1,21 +1,7 @@
 <?php
 include "../databaseconnection/dbconnect.php";
 ?>
-<?php
 
-if (isset($_GET['query'])) {
-    $searchQuery = $_GET['query'];
-    $sql = "SELECT * FROM products WHERE productName LIKE '%$searchQuery%'";
-    $result = mysqli_query($conn, $sql);
-    if (mysqli_num_rows($result) > 0) {
-        while ($row = mysqli_fetch_assoc($result)) {
-            echo $row['productName'] . '<br>';
-        }
-    } else {
-        echo "No results found.";
-    }
-}
-?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -71,6 +57,10 @@ if (isset($_GET['query'])) {
 }
 
 
+
+
+
+
     </style>
 </head>
 <body>
@@ -78,11 +68,10 @@ if (isset($_GET['query'])) {
         <div class="logo"><a href="index.php"><img src="../../svgs/logo-no-background.svg" alt=""></a></div>
         <div class="menu">
             <div class="search-bar">
-                <li><input type="text" placeholder="Search" name="" id=""></li>
-                <li><form action="" method="get">
+                <li><form action="../search/search.php" method="get">
+                <li><input type="text" placeholder="Search" name="search" id=""></li>
                 <button type="submit"><img src="../../svgs/icons8-search.svg" alt=""></button>
                 </form></li>
-                </ul>
             </div>
             <div class="list">
                 <ul class="list-menu">
@@ -228,7 +217,7 @@ if (isset($_GET['query'])) {
         echo '<div class="details">';
         echo '<p class="head">' . $product["productName"] . '</p>';
         echo '<p class="price">Rs. ' . $product["price"] . '</p>';
-        echo '<button class="buy"><a href="../buynow/buynow.php?id=' . $product["product_id"] . '">Buy Now</a></button>';
+        echo '<button class="buy"><a href="../buynow/buynow.php?id=' . $product["product_id"] . '">View details</a></button>';
         echo '</div>';
         echo '</div>';
       }
@@ -239,10 +228,10 @@ if (isset($_GET['query'])) {
   </div>
 </div>
 
-        <div class="next-page">
+        <!-- <div class="next-page">
             <button class="one"><a href="index.php">1</a></button>
             <button class="two"><a href="secondpage.php">2</a></button>
-        </div>
+        </div> -->
         </div>
     <footer>
         <div class="follow">

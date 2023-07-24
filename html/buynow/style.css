@@ -248,3 +248,15 @@ footer{
 .quantity input{
     width: 40px;
 }
+.main-btns{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    margin-left: -50px;
+    margin-top: 1rem;
+}
+#addtocart{
+    padding: 0.2rem;
+    border: 2px solid black;
+}

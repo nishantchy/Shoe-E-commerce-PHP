@@ -13,7 +13,12 @@ $success = $error = $uploadError = $fileError1 = $fileError = $error1 = $priceEr
 // Check if the product ID is provided in the URL
 if (isset($_GET['id'])) {
     $productId = $_GET['id'];
-
+    $product_id = $_GET['id'];
+    $sql1 = "SELECT product_id, productName, price, details, productImage FROM products WHERE product_id = $product_id";
+    $result = $conn->query($sql1);
+    if ($result->num_rows > 0) {
+        $product = $result->fetch_assoc();
+    }
     if (isset($_POST['submit'])) {
         $title = $_POST['title'];
         $price = $_POST['price'];
@@ -199,12 +204,12 @@ if (isset($_GET['id'])) {
         <form action="" method="post" enctype="multipart/form-data">
             <div class="title">
             <label for="">Title</label>
-            <input type="text" name="title" id="">
+            <input type="text" name="title" id="" value="<?php echo $product['productName'] ?>">
             <p class="error title-error"><?php echo $titleError ?></p>
             </div>
             <div class="price">
             <label for="">Price</label>
-            <input type="text" name="price" id="">
+            <input type="text" name="price" id="" value="<?php echo $product['price'] ?>">
             <p class="error price-error"><?php echo $priceError ?></p>
             <p class="error price-error1"><?php echo $priceError1 ?></p>
             </div>

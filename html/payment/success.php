@@ -4,21 +4,23 @@ $sql = "SELECT * FROM products";
     $result = $conn->query($sql);
     if ($result->num_rows > 0) {
         $product = $result->fetch_assoc();
+        $product_id = $product['product_id'];
     }
 require('config.php');
 
 if(isset($_POST['stripeToken'])){
 \Stripe\Stripe::setVerifySslCerts(false);
 $token = $_POST['stripeToken'];
+$total = $_POST['total'];
 $data = \Stripe\Charge::create(array(
-    "amount" => $product['price'],
-    "currency" => "usd",
+    "amount" => $total*100,
+    "currency" => "inr",
     "description" => $product['productName'], 
     "source" => $token,
 ));
-// echo "<pre>";
-// print_r($data);
-    header('Location: receipt.php');
+
+    header('Location: receipt.php?product_id=' . $product_id);
+    exit();
 }
 
 ?>

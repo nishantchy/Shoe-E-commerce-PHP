@@ -133,7 +133,6 @@ table{
                     <th>Title</th>
                     <th>Edit</th>
                     <th>Delete</th>
-                    <th>Sales</th>
                 </tr>
             </thead>
             <tbody>
@@ -150,7 +149,6 @@ table{
                     echo '<td>' . $productName . '</td>';
                     echo '<td><button><a href="edit.php?id=' . $productId . '">Edit</a></button></td>';
                     echo '<td><button onclick="confirmDelete(' . $productId . ', this)">Delete</button></td>';
-                    echo '<td>' . $times_sold . '</td>';
                     echo '</tr>';
                 }
             } else {

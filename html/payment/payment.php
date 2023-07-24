@@ -9,7 +9,6 @@ include "../databaseconnection/dbconnect.php";
      $result = $conn->query($sql);
      if ($result->num_rows > 0) {
          $product = $result->fetch_assoc(); 
-         $total = $product['price'];
      } else {
          echo "Product not found.";
    }
@@ -31,6 +30,7 @@ include "../databaseconnection/dbconnect.php";
     height: 40px;
     object-fit: cover;    
  }
+
     </style>
 </head>
 <body>
@@ -110,31 +110,37 @@ include "../databaseconnection/dbconnect.php";
     <!-- End of Navigation -->
 
 <!-- Main Content -->
+<?php  
+$total = $_POST['price'] * $_POST['quantity']; 
+?>
+
     <p class="intro">Select Payment Method</p>
     <div class="container">
         <div class="payments">
             <div class="esewa">
+            <?php echo '<form action="../payment/stripe.php?id=' . $product['product_id'] . '" method="post">'; ?>
+            <img src="../../svgs/stripe.svg" alt="">
+            <p>Stripe</p>
+            <input type="hidden" name="total" value="<?php echo $total; ?>">
             <?php
-            echo '<a href="../payment/stripe.php?id=' . $product["product_id"] . '"><img src="../../svgs/stripe.svg" alt=""></a>';
+            echo '<input type="submit" name="submit" value="Pay through Stripe" id="buynow">';
+            echo '</form>';
             ?>
-                <p>Stripe</p>
-            </div>
-            <div class="esewa">
-                <a href="esewa.php"><img src="../../svgs/esewa-seeklogo.com.svg" alt=""></a>
-                <p>Esewa Wallet</p>
-            </div>
-            <div class="khalti">
-                <a href="khalti.php"><img src="../../svgs/khalti-seeklogo.com.svg" alt=""></a>
-                <p>Khalti Wallet</p>
             </div>
             <div class="cash">
-                <a href=""><img src="../../svgs/cash-on-delivery.png" alt=""></a>
+                <img src="../../svgs/cash-on-delivery.png" alt="">
+                <?php echo '<form action="../payment/cashond.php?id' .$product['product_id'] . '" method="post">'; ?>
+                <input type="hidden" name="total" value="<?php echo $total; ?>">
                 <p>Cash on delivery</p>
+                <?php echo '<input type="submit" name="submit" value="Cash On Delivery" id="buynow">';?>
+
+                </form>
+                
             </div>
         </div>
         <div class="summary">
             <p class="head">Order Summary</p>
-            <p class="amount">Total Amount: Rs.  <?php echo $total ?></p>
+            <p class="amount">Total Amount: Rs.  <input type="text" name="total" id="" value="<?php echo $total ?>"></p>
         </div>
     </div>
    <!-- Footer -->

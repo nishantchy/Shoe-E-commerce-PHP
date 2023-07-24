@@ -12,23 +12,36 @@ if (isset($_GET['id'])) {
     if ($result->num_rows > 0) {
         $product = $result->fetch_assoc();
         $_SESSION['product'] = $product;
-        $total = $product['price'];
-        $_SESSION['total'] = $total;
-
         if (!isset($_SESSION['cart'])) {
             $_SESSION['cart'] = [];
         }
-        array_push($_SESSION['cart'], $product);
+
+        // Check if the product is already in the cart
+        $productExists = false;
+        foreach ($_SESSION['cart'] as $cartProduct) {
+            if ($cartProduct['product_id'] == $product_id) {
+                $productExists = true;
+                break;
+            }
+        }
+
+        if (!$productExists) {
+            // Add the quantity to the product array
+            $product['quantity'] = $quantity;
+            array_push($_SESSION['cart'], $product);
+        } else {
+            echo "Product is already in the cart.";
+        }
     } else {
         echo "Product not found.";
     }
 }
 ?>
-<?php
-if(isset($_POST['add'])){
 
-}
-?>
+<!-- Rest of the code remains the same -->
+
+
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -87,6 +100,10 @@ nav ul li a{
 }
 .product{
     margin-top: 6rem;
+}
+#buynow{
+    padding: 0.2rem;
+    border: 2px solid black;
 }
     </style>
 </head>
@@ -171,32 +188,43 @@ nav ul li a{
         <div class="product-details">
             <div class="description">
                 <p class="header"><?php echo $product['productName']; ?></p>
-                <p class="price">Rs. <?php echo $product['price']; ?></p>
                 <p class="price"><?php echo $product['details']; ?></p>
                 <div class="quantity">
-                <form action="" method="post">
-                Quantity: <input type="number" name="quantity" min="1" max="10" value="1" placeholder="1">
-                <!-- <input type="hidden" name="name" value="<?= $product['productName']?>">
-                <input type="hidden" name="price" value="<?= $product['productPrice']?>"> -->
+                <?php echo '<form action="../payment/payment.php?id=' . $product['product_id'] . '" method="post">'; ?>
+                <!-- <p class="price">Rs. <?php echo $product['price']; ?></p> -->
+                <input type="text" name="price" id="" value="<?php echo $product['price'];  ?>">
+                Quantity: <input type="number" name="quantity" min="1" max="10" value="1" placeholder="1"><br>
                 </div>
+                
             </div>
-            <div class="order-btns">
-                <?php
-            echo '<button class="buy-now" type="submit"><a href="../payment/payment.php?id=' . $product["product_id"] . '">Buy Now</a></button>';
-            ?>
-                <?php
-                echo '<button type="submit" class="buy" name="add" onclick="addToCart(\'?id=' . $product['product_id'] . '\');">Add to Cart 
-                <img id="greencheck" src="../../svgs/greencheck.svg" alt=""> </button>';   
-                echo '<script>
-                function addToCart(productId) {
-                const btn = document.querySelector(".buy");
-                document.getElementById("greencheck").style.display = "block";
-                btn.innerText = "Added to Cart ";
-                }
-                </script>';
-?>
-            </div>
+            <div class="main-btns">
+                <div class="buy-now">
+                    <input type="submit" name="submit" value="Buy Now" id="buynow">
+                </div>
             </form>
+                <div class="addtocart">
+                    <?php echo '<form action="../cart/cart.php?id=' .$product['product_id'] .'" method="post" >'; ?>
+                        <input type="submit" name="add" value="Add to Cart" id="addtocart">
+                    </form>
+                    </div>
+            </div>
+                <?php
+                // echo '<button type="submit" class="buy" name="add">Add to Cart</button>';
+                
+                // echo '<button type="submit" class="buy" name="add" onclick="addToCart(\'?id=' . $product['product_id'] . '\');">Add to Cart</button>';   
+                // echo '<script>
+                // function addToCart(productId) {
+                // const btn = document.querySelector(".buy");
+                // document.getElementById("greencheck").style.display = "block";
+                // btn.innerText = "Added to Cart ";
+                // }
+                // </script>';
+?>
+
+            </div>
+            
+            
+                </div>
         </div>
     </div>
 </section>
