@@ -441,9 +441,9 @@ footer{
   gap: 3rem;
 }
 
-.search-img {
+/* .search-img {
   margin-right: 10px;
-}
+} */
 
 .search-content {
   width: 100%;
@@ -467,7 +467,4 @@ footer{
   .buy-specific a{
     text-decoration: none;
     color: aliceblue;
-}
-.search-price{
-
 }

@@ -27,12 +27,11 @@ if (isset($_GET['id'])) {
 <nav id="navigation">
         <div class="logo"><a href="../Main Page/index.php"><img src="../../svgs/logo-no-background.svg" alt=""></a></div>
         <div class="menu">
-            <div class="search-bar">
-                <li><input type="text" placeholder="Search" name="" id=""></li>
-                <li><form action="" method="get">
+        <div class="search-bar">
+                <li><form action="../search/search.php" method="get">
+                <li><input type="text" placeholder="Search" name="search" id=""></li>
                 <button type="submit"><img src="../../svgs/icons8-search.svg" alt=""></button>
                 </form></li>
-                </ul>
             </div>
             <div class="list">
                 <ul class="list-menu">

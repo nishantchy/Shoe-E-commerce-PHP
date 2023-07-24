@@ -381,3 +381,30 @@ nav ul li a{
     background-color: #597cdc;
     transition: 1200ms ease-out;
 }
+.search-bar li input{
+    padding: 0.5rem 2rem;
+    border-radius: 0.3rem;
+    border: 1px solid #dedede;
+}
+
+
+.search-bar img{
+    width: 25px;
+    /* margin-top: 3px; */
+}
+.search-bar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.search-bar form {
+    display: flex;
+    align-items: center;
+}
+.search-bar button[type="submit"] {
+    background-color: #dedede;
+    border: 1px solid #dedede;
+    padding: 0.4rem 0.45rem;
+    border-radius: 0.3rem;
+}
