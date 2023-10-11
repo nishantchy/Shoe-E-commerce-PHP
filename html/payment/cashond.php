@@ -3,29 +3,33 @@ include "../databaseconnection/dbconnect.php";
 ?>
 <?php
   session_start();
- if (isset($_GET['id'])) {
-     $product_id = $_GET['id'];
-     $sql = "SELECT product_id,productName, price,details, productImage FROM products WHERE product_id = $product_id";
-     $result = $conn->query($sql);
-     if ($result) {
-        $product = $result->fetch_assoc();
-        $orderProductName = $product['productName'];
-        $orderPrice = $product['price'];
-        $orderImage = $product['productImage'];
-
-        $insertSql = "INSERT INTO orders (o_name, o_price, o_image) VALUES ('$orderProductName', $orderPrice, '$orderImage')";
-        $insertResult = $conn->query($insertSql);
-
-        if ($insertResult) {
-            // echo "Order details inserted successfully.";
-        } else {
-            echo "Error inserting order details: " . $conn->error;
-        }
-    } else {
-        echo "Error fetching product details: " . $conn->error;
-    }
-}
-
+//   if (isset($_SESSION['user_id'])) {
+    if (isset($_GET['id'])) {
+        $product_id = $_GET['id'];
+        $sql = "SELECT product_id,productName, price,details, productImage FROM products WHERE product_id = $product_id";
+        $result = $conn->query($sql);
+        if ($result) {
+           $product = $result->fetch_assoc();
+           $orderProductName = $product['productName'];
+           $orderPrice = $product['price'];
+           $orderImage = $product['productImage'];
+        //    $user_id = $_SESSION['user_id'];
+   
+        //    $insertSql = "INSERT INTO orders (user_id, o_name, o_price, o_image) VALUES ('$user_id','$orderProductName', $orderPrice, '$orderImage')";
+           $insertSql = "INSERT INTO orders (o_name, o_price, o_image) VALUES ('$orderProductName', $orderPrice, '$orderImage')";
+           $insertResult = $conn->query($insertSql);
+   
+           if ($insertResult) {
+               // echo "Order details inserted successfully.";
+           } else {
+               echo "Error inserting order details: " . $conn->error;
+           }
+       } else {
+           echo "Error fetching product details: " . $conn->error;
+       }
+   }
+   
+//   }
 ?>
 
 <!DOCTYPE html>

@@ -116,9 +116,9 @@ if (isset($_GET['id'])) {
     data-key="<?php echo $publishableKey ?>"
     data-amount=<?php echo $total * 100?>
     data-name="<?php echo $product['productName'] ?>"
-    data-description="<?php echo $product['details'] ?>"
+    data-description="<?php echo $product['product_id'] ?>"
     data-image= "<?php echo $product['productImage'] ?>"
-    data-currency="inr">
+    data-currency="NPR">
     </script>
     </form>
    </div>

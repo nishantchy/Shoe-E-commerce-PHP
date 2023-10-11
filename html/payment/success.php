@@ -16,8 +16,8 @@ $token = $_POST['stripeToken'];
 $total = $_POST['total'];
 $data = \Stripe\Charge::create(array(
     "amount" => $total*100,
-    "currency" => "inr",
-    "description" => $product['productName'], 
+    "currency" => "NPR",
+    "description" => $token, 
     "source" => $token,
 ));
 

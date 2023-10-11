@@ -194,7 +194,8 @@ nav ul li a{
                 <?php echo '<form action="../payment/payment.php?id=' . $product['product_id'] . '" method="post">'; ?>
                 <!-- <p class="price">Rs. <?php echo $product['price']; ?></p> -->
                 <input type="text" name="price" id="" value="<?php echo $product['price'];  ?>">
-                Quantity: <input type="number" name="quantity" min="1" max="10" value="1" placeholder="1"><br>
+                Quantity: <input type="number" name="quantity" min="1" max="10" value="1" placeholder="1" onchange="updateQuantity()"><br>
+                <input type="hidden" name="selected_quantity" value="1">
                 </div>
                 
             </div>
@@ -228,6 +229,15 @@ nav ul li a{
                 </div>
         </div>
     </div>
+    <script>
+function updateQuantity() {
+    const quantityInput = document.querySelector('input[name="quantity"]');
+    const selectedQuantityInput = document.querySelector('input[name="selected_quantity"]');
+    
+    // Update the hidden input with the selected quantity
+    selectedQuantityInput.value = quantityInput.value;
+}
+</script>
 </section>
 
 

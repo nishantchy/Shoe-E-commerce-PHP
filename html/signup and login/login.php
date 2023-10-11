@@ -19,13 +19,13 @@ if(isset($_POST['submit'])){
     $result = mysqli_query($conn, $sql);
     if($result){
         if(mysqli_num_rows($result)==1){
-          // $row = mysqli_fetch_assoc($result);
-            // if(md5($pass) == $row['password']) {s
+          $user = $result->fetch_assoc();
+        $user_id = $user['id'];
             session_start();
             $_SESSION['loggedin']=true;
+            $_SESSION['user_id'] = $user_id;
             $_SESSION['email']=$email;
             header("Location: ../Main Page/index.php");
-        // }
         }
         else{
             $error = "Invalid details";

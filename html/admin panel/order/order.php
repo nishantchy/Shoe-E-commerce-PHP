@@ -111,42 +111,55 @@ $conn = mysqli_connect($server, $username, $password, $dbname);
             </div>
         </div>
     
-    <div class="right-content">
-        <p>Order Details</p> 
-        <div class="table-section">
-            <table id="example" class="table table-striped" style="width:100%;">
-                        <thead>
-                            <tr>
-                                <th>Order Id</th>
-                                <th>Name</th>
-                                <th>Amount</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        <?php
-            $sql = "SELECT * FROM orders";
-            $result = mysqli_query($conn, $sql);
+        <div class="right-content">
+    <p>Order Details</p>
+    <div class="table-section">
+        <table id="example" class="table table-striped" style="width:100%;">
+            <thead>
+                <tr>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>Total</th>
+                    <th>Average</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                // Get the current date
+                $currentDate = date('Y-m-d');
 
-            if (mysqli_num_rows($result) > 0) {
-                while ($row = mysqli_fetch_assoc($result)) {
-                    $order_id = $row['order_id'];
-                    $order_name = $row['o_name'];
-                    $order_price = $row['o_price'];
+                // Calculate the start and end dates for the current week
+                $startDate = date('Y-m-d', strtotime('last Monday', strtotime($currentDate)));
+                $endDate = date('Y-m-d', strtotime('next Sunday', strtotime($currentDate)));
+
+                // Query to calculate total sales for the current week
+                $sql = "SELECT SUM(o_price) AS total_sales FROM orders WHERE o_date BETWEEN '$startDate' AND '$endDate'";
+                $result = mysqli_query($conn, $sql);
+
+                if ($result && mysqli_num_rows($result) > 0) {
+                    $row = mysqli_fetch_assoc($result);
+                    $totalSales = $row['total_sales'];
+                    $averageSales = number_format($totalSales / 7, 4);
+
                     echo '<tr>';
-                    echo '<td>' . $order_id . '</td>';
-                    echo '<td>' . $order_name . '</td>';
-                    echo '<td>' . $order_price . '</td>';
+                    echo '<td>' . $startDate . '</td>';
+                    echo '<td>' . $endDate . '</td>';
+                    echo '<td>' . $totalSales . '</td>';
+                    echo '<td>' . $averageSales . '</td>';
+                    echo '</tr>';
+                } else {
+                    echo '<tr>';
+                    echo '<td>' . $startDate . '</td>';
+                    echo '<td>' . $endDate . '</td>';
+                    echo '<td colspan="2">No orders found for the current week.</td>';
                     echo '</tr>';
                 }
-            } else {
-                echo '<tr><td colspan="4">No products found</td></tr>';
-            }
-            ?>             
-                            </tbody>
-                            </table>
-        </div>
+                ?>
+            </tbody>
+        </table>
     </div>
-    </div>
+</div>
+
 </div>
 <script src="/html/admin panel/order/main.js"></script>
     </body>

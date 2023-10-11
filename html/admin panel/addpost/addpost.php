@@ -14,9 +14,9 @@ $conn = mysqli_connect($server, $username, $password, $dbname);
 <?php 
 $success = $error = $uploadError = $fileError1 = $fileError = $error1 = $priceError = $priceError1= $titleError=null;
 if(isset($_POST['submit'])){
-    $title = $_POST['title'];
+    $title = htmlspecialchars($_POST['title']);
     $price = $_POST['price'];
-    $details = $_POST['details'];
+    $details = htmlspecialchars($_POST['details']);
     $target_dir = "../../../uploads/";
     $target_file = $target_dir . basename($_FILES["fileUpload"]["name"]);
     $img = basename($_FILES["fileUpload"]["name"]);
@@ -220,12 +220,12 @@ if(isset($_POST['submit'])){
                 <form action="" method="post" enctype="multipart/form-data">
                     <div class="title">
                         <label for="">Title</label>
-                    <input type="text" name="title" id="" class="title-border">
+                    <input type="text" name="title" id="" class="title-border" value="<?php if(isset($_POST['title'])) echo $_POST['title'];?>">
                     <p class="error"><?php echo $titleError ?></p>
                     </div>
                     <div class="price">
                         <label for="">Price</label>
-                    <input type="text" name="price" id="" class="price-border">
+                    <input type="text" name="price" id="" class="price-border"value="<?php if(isset($_POST['price'])) echo $_POST['price'];?>">
                     <p class="error"><?php echo $priceError ?></p>
                     <p class="error1"><?php echo $priceError1 ?></p>
                     </div>

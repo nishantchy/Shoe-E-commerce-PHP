@@ -55,6 +55,11 @@ include "../databaseconnection/dbconnect.php";
     gap: 0.5rem;
     flex-wrap: wrap;
 }
+.no-result{
+    text-align: center;
+    margin-top: 3rem;
+    margin-right: 4rem;
+}
 
     </style>
 </head>
@@ -159,7 +164,7 @@ include "../databaseconnection/dbconnect.php";
                 echo "</div>";
             }
         } else {
-            echo "No results found.";
+            echo '<p class="no-result">Result not found</p>';
         }
         $conn->close();
     } else {

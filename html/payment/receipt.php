@@ -1,34 +1,33 @@
 <?php
 include "../databaseconnection/dbconnect.php";
-
+session_start();
 // Retrieve the product ID from the URL
-if (isset($_GET['product_id'])) {
-    $product_id = $_GET['product_id'];
-
-    // Fetch the product details from the database
-    $sql = "SELECT * FROM products WHERE product_id = $product_id";
-    $result = $conn->query($sql);
-
-    if ($result) {
-        // Fetch the product details
-        $product = $result->fetch_assoc();
-
-        // Insert the product details into the orders table
-        $orderProductName = $product['productName'];
-        $orderPrice = $product['price'];
-        $orderImage = $product['productImage'];
-
-        $insertSql = "INSERT INTO orders (o_name, o_price,  o_image) VALUES ('$orderProductName', $orderPrice, '$orderImage')";
-        $insertResult = $conn->query($insertSql);
-
-        if ($insertResult) {
-            // echo "Order details inserted successfully.";
-        } else {
-            echo "Error inserting order details: " . $conn->error;
-        }
-    } else {
-        echo "Error fetching product details: " . $conn->error;
-    }
+if (isset($_SESSION['user_id'])) {
+    if (isset($_GET['id'])) {
+        $product_id = $_GET['id'];
+        $sql = "SELECT product_id,productName, price,details, productImage FROM products WHERE product_id = $product_id";
+        $result = $conn->query($sql);
+        if ($result) {
+           $product = $result->fetch_assoc();
+           $orderProductName = $product['productName'];
+           $orderPrice = $product['price'];
+           $orderImage = $product['productImage'];
+        //    $user_id = $_SESSION['user_id'];
+   
+        //    $insertSql = "INSERT INTO orders (o_name, o_price, o_image, user_id) VALUES ('$orderProductName', $orderPrice, '$orderImage', '$user_id')";
+           $insertSql = "INSERT INTO orders (o_name, o_price, o_image) VALUES ('$orderProductName', $orderPrice, '$orderImage')";
+           $insertResult = $conn->query($insertSql);
+   
+           if ($insertResult) {
+               // echo "Order details inserted successfully.";
+           } else {
+               echo "Error inserting order details: " . $conn->error;
+           }
+       } else {
+           echo "Error fetching product details: " . $conn->error;
+       }
+   }
+   
 }
 ?>
 

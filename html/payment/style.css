@@ -333,3 +333,10 @@ footer{
     padding: 0.08rem 0.45rem;
     border-radius: 0.3rem;
 }
+
+.user .change-img img {
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+}
